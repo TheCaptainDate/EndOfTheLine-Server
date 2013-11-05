@@ -1,7 +1,17 @@
 package com.strangeiron.endoftheline.server;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import com.esotericsoftware.yamlbeans.YamlException;
+import com.esotericsoftware.yamlbeans.YamlReader;
+
 public class Settings {
 	
+	private static Logger log = Logger.getLogger("1");
 	private int port;
 	private String pathToJar;
 	private int max_players;
@@ -14,9 +24,31 @@ public class Settings {
 		return __instace;
 	}
 	
-	static void reset()
+	public void reset()
 	{
 		__instace = new Settings();
+	}
+	
+	public void LoadSettings() {
+		YamlReader reader = null;
+		Map<?, ?> map = null; // @TODO: should that ?, ? be there? Or Map(Object, Object?)?
+		try {
+			reader = new YamlReader(new FileReader(pathToJar + File.separator + "config.yml"));
+		} catch (FileNotFoundException e) {
+			log.warning("Can't find config.yml!");
+			e.printStackTrace();
+		}
+		try {
+			 map = (Map<?, ?>) reader.read();
+		} catch (YamlException e) {
+			log.warning("Can't load config.yml (wrong yml syntax?!)");
+			e.printStackTrace();
+		}
+		
+		int port = Integer.parseInt((String) ((map.get("port") == null) ? default_port : map.get("port")));
+		setPort(port);
+		int max_players = Integer.parseInt((String) ((map.get("max_players") == null) ? default_maxplrs : map.get("max_players")));
+		setMaxPlayers(max_players);
 	}
 
 	public int getPort() {
