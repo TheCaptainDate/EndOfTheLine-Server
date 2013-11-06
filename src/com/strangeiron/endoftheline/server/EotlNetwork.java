@@ -13,7 +13,11 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.strangeiron.endoftheline.server.entity.EotlCharacter;
+import com.strangeiron.endoftheline.server.entity.EotlEntity;
+import com.strangeiron.endoftheline.server.entity.EotlEntityManager;
 import com.strangeiron.endoftheline.server.protocol.EotlLoginPacket;
+import com.strangeiron.endoftheline.server.protocol.EotlNewEntityPacket;
 import com.strangeiron.endoftheline.server.protocol.EotlPlayer;
 import com.strangeiron.endoftheline.server.protocol.EotlPlayerConnection;
 
@@ -24,6 +28,7 @@ public class EotlNetwork {
 	private EotlSettings settings;
 	private final Logger log = Logger.getLogger("");
 	private HashSet<EotlPlayer> players = new HashSet<EotlPlayer>();
+	private EotlEntityManager entityManager = EotlEntityManager.GetInstance();
 	
 	private EotlNetwork() {
 		settings = EotlSettings.GetInstance();
@@ -69,6 +74,17 @@ public class EotlNetwork {
                     			return;
                     		}
                     	}
+                    	// Создаем класс игрока
+                    	EotlPlayer ply = new EotlPlayer();
+                    	ply.Name = packet.Name;
+                    	ply.connection = connection;
+                    	players.add(ply);
+                    	
+                    	// Создаем энтити игрока и отсылаем ее всем.
+                    	 EotlCharacter character = new EotlCharacter();
+                    	 character.x = 50;
+                    	 character.y = 50;
+                    	 entityManager.registerEntity(character);
                     	
                     	log.info("Player \"" + packet.Name + "\" has connected");
                     	return;
@@ -96,10 +112,21 @@ public class EotlNetwork {
         server.start();
 	}
 	
-	public void loadClasses(EndPoint endpoint)
+	private void loadClasses(EndPoint endpoint)
 	{
 		Kryo kryo = endpoint.getKryo();
 		kryo.register(EotlLoginPacket.class);
+	}
+	
+	public void createEntity(EotlEntity ent)
+	{
+		EotlNewEntityPacket packet = new EotlNewEntityPacket();
+		packet.entity = ent;
+		
+		for(EotlPlayer ply : players)
+		{
+			ply.connection.sendTCP(packet);
+		}
 	}
 
 }

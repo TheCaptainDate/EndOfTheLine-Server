@@ -6,6 +6,29 @@
 
 package com.strangeiron.endoftheline.server.entity;
 
-public class EotlEntityManager {
+import java.util.ArrayList;
 
+import com.strangeiron.endoftheline.server.EotlNetwork;
+
+public class EotlEntityManager {
+	
+	private static  EotlEntityManager __instance = new EotlEntityManager();
+	private EotlNetwork network;
+	private ArrayList<EotlEntity> entites;
+	
+	private EotlEntityManager() {
+		entites = new ArrayList<EotlEntity>();
+		network = EotlNetwork.GetInstance();
+	}
+	
+	public static EotlEntityManager GetInstance() 
+	{
+		return __instance;
+	}
+	
+	public void registerEntity(EotlEntity ent) 
+	{
+		entites.add(ent);
+		network.createEntity(ent);
+	}
 }

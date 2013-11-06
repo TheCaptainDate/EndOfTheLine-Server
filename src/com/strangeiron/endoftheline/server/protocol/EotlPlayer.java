@@ -7,5 +7,6 @@
 package com.strangeiron.endoftheline.server.protocol;
 
 public class EotlPlayer {
+	public EotlPlayerConnection connection;
 	public String Name;
 }
