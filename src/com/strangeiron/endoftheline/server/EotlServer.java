@@ -12,22 +12,24 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
-public class Server {
+public class EotlServer {
 
 	private static Logger log = Logger.getLogger("");
 	private static String version = "0.0.1";
 	public static String Tag = "End Of The Line";
 	public static String ShortTag = "EOTL";
 	private static BufferedReader br;
+	private static EotlSettings settings;
+	private static EotlNetwork network;
 	
 	public static final void main(String[] args) {
 		log.info("\"" + Tag + "\" server v" + version + " is loading");
 		
 		br = new BufferedReader(new InputStreamReader(System.in));
-		Settings settings = Settings.GetInstance();
+		settings = EotlSettings.GetInstance();
 		
 		try {
-			settings.setPathToJar(Server.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+			settings.setPathToJar(EotlServer.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -49,9 +51,13 @@ public class Server {
 		
 		// загружаем конфигурации
 		settings.LoadSettings();
+		
+		// загружаем сервер
+		network = EotlNetwork.GetInstance();
+		network.init();
 	}
 	
-	private static void readAnyKeyExit(String msg) {
+	public static void readAnyKeyExit(String msg) {
 		log.warning(msg);
 		log.info("Press ENTER to exit");
 		

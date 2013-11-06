@@ -9,24 +9,24 @@ import java.util.logging.Logger;
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
 
-public class Settings {
+public class EotlSettings {
 	
-	private static Logger log = Logger.getLogger("1");
+	private static Logger log = Logger.getLogger("");
 	private int port;
 	private String pathToJar;
-	private int max_players;
-	private static Settings __instace = new Settings();
+	private int maxPlayers;
+	private static EotlSettings __instace = new EotlSettings();
 	public final int default_port = 12345;
 	public final int default_maxplrs = 5;
 	
-	static Settings GetInstance()
+	static EotlSettings GetInstance()
 	{
 		return __instace;
 	}
 	
 	public void reset()
 	{
-		__instace = new Settings();
+		__instace = new EotlSettings();
 	}
 	
 	public void LoadSettings() {
@@ -71,13 +71,13 @@ public class Settings {
 	}
 
 
-	public int getMax_players() {
-		return max_players;
+	public int getMaxPlayers() {
+		return maxPlayers;
 	}
 
 
 	public void setMaxPlayers(int max_players) {
-		this.max_players = max_players;
+		this.maxPlayers = max_players;
 	}
 
 }
