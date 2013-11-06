@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
 public class EotlServer {
@@ -28,14 +27,11 @@ public class EotlServer {
 		br = new BufferedReader(new InputStreamReader(System.in));
 		settings = EotlSettings.GetInstance();
 		
-		try {
-			settings.setPathToJar(EotlServer.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		settings.setPathToJar(GetExecutionPath());
 		
 		// Проверяем существование файла настроек.
 		File settings_file = new File(settings.getPathToJar() + File.separator + "config.yml");
+
 		if(!settings_file.exists())
 		{
 			// AHTUNG, NO CONFIG!
@@ -55,6 +51,12 @@ public class EotlServer {
 		// загружаем сервер
 		network = EotlNetwork.GetInstance();
 		network.init();
+	}
+	
+	private static String GetExecutionPath(){
+	    String absolutePath = EotlServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+	    absolutePath = absolutePath.substring(0, absolutePath.lastIndexOf("/"));
+	    return absolutePath;
 	}
 	
 	public static void readAnyKeyExit(String msg) {

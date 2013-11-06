@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.strangeiron.endoftheline.server.protocol.EotlLoginPacket;
@@ -41,6 +43,8 @@ public class EotlNetwork {
 			}
 		};
 		
+		loadClasses(server);
+		
 		// listener
         server.addListener(new Listener() {
             public void received (Connection c, Object object) {
@@ -66,8 +70,7 @@ public class EotlNetwork {
                     		}
                     	}
                     	
-                    	
-                    	log.info("Player " + packet.Name + "has connected");
+                    	log.info("Player \"" + packet.Name + "\" has connected");
                     	return;
                     }
             }
@@ -91,6 +94,12 @@ public class EotlNetwork {
 			EotlServer.readAnyKeyExit("Error: Can't bind port!");
 		}
         server.start();
+	}
+	
+	public void loadClasses(EndPoint endpoint)
+	{
+		Kryo kryo = endpoint.getKryo();
+		kryo.register(EotlLoginPacket.class);
 	}
 
 }
