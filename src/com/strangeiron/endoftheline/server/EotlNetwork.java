@@ -130,6 +130,22 @@ public class EotlNetwork {
 		
 		EotlEntityUpdatePacket packet = new EotlEntityUpdatePacket();
 		packet.data = ent.generateUpdateData();
+		packet.data.put("action", "register");
+		
+		for(EotlPlayer ply : players)
+		{
+			ply.connection.sendTCP(packet);
+		}
+	}
+	
+	public void broadcastEntityUpdate(EotlEntity ent)
+	{
+		if(ent == null) return;
+		
+		System.out.println("update");
+		EotlEntityUpdatePacket packet = new EotlEntityUpdatePacket();
+		packet.data = ent.generateUpdateData();
+		packet.data.put("action", "update");
 		
 		for(EotlPlayer ply : players)
 		{

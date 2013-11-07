@@ -4,17 +4,14 @@ import java.util.HashMap;
 
 public class EotlCharacter extends EotlEntity{
 	private final String TYPE = "Character";
-	
+	private int modificator = 3;
 	
 	@Override
-	public void tick() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void render() {
-
+	public void tick(double delta) {
+		if(x <= 10) modificator = 3;
+		if(x >= 1000) modificator = -3;
+		x = x + (float) (modificator * delta);
+		System.out.println(x);
 	}
 
 	@Override

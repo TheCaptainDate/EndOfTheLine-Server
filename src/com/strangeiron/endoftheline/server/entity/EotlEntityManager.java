@@ -6,6 +6,7 @@
 
 package com.strangeiron.endoftheline.server.entity;
 
+import java.io.EOFException;
 import java.util.ArrayList;
 
 import com.strangeiron.endoftheline.server.EotlNetwork;
@@ -18,6 +19,15 @@ public class EotlEntityManager {
 	
 	private EotlEntityManager() {
 		 network = EotlNetwork.GetInstance();
+	}
+	
+	public void tick(double delta) 
+	{
+		for(EotlEntity ent : entites) 
+		{
+			ent.tick(delta);
+			EotlNetwork.GetInstance().broadcastEntityUpdate(ent);
+		}
 	}
 	
 	public static EotlEntityManager GetInstance() 

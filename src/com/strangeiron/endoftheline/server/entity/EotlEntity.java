@@ -7,7 +7,6 @@ public abstract class EotlEntity {
 	public float x;
 	public float y;
 
-	public abstract void tick();
-	public abstract void render();
+	public abstract void tick(double delta);
 	public abstract HashMap<String, String> generateUpdateData();
 }
