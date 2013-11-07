@@ -14,11 +14,10 @@ public class EotlEntityManager {
 	
 	private static  EotlEntityManager __instance = new EotlEntityManager();
 	private EotlNetwork network;
-	private ArrayList<EotlEntity> entites;
+	private ArrayList<EotlEntity> entites = new ArrayList<EotlEntity>(); 
 	
 	private EotlEntityManager() {
-		entites = new ArrayList<EotlEntity>();
-		network = EotlNetwork.GetInstance();
+		 network = EotlNetwork.GetInstance();
 	}
 	
 	public static EotlEntityManager GetInstance() 
@@ -29,6 +28,5 @@ public class EotlEntityManager {
 	public void registerEntity(EotlEntity ent) 
 	{
 		entites.add(ent);
-		network.createEntity(ent);
 	}
 }

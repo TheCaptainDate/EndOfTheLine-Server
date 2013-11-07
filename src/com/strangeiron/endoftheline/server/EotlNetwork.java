@@ -5,6 +5,7 @@
 package com.strangeiron.endoftheline.server;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
@@ -17,7 +18,7 @@ import com.strangeiron.endoftheline.server.entity.EotlCharacter;
 import com.strangeiron.endoftheline.server.entity.EotlEntity;
 import com.strangeiron.endoftheline.server.entity.EotlEntityManager;
 import com.strangeiron.endoftheline.server.protocol.EotlLoginPacket;
-import com.strangeiron.endoftheline.server.protocol.EotlNewEntityPacket;
+import com.strangeiron.endoftheline.server.protocol.EotlEntityUpdatePacket;
 import com.strangeiron.endoftheline.server.protocol.EotlPlayer;
 import com.strangeiron.endoftheline.server.protocol.EotlPlayerConnection;
 
@@ -85,6 +86,7 @@ public class EotlNetwork {
                     	 character.x = 50;
                     	 character.y = 50;
                     	 entityManager.registerEntity(character);
+                    	 broadcastEntity(character);
                     	
                     	log.info("Player \"" + packet.Name + "\" has connected");
                     	return;
@@ -99,7 +101,9 @@ public class EotlNetwork {
 		    }
 		
 		    public void disconnected (Connection c) {
-		           
+		    	  EotlPlayerConnection connection = (EotlPlayerConnection)c;
+		    	  players.remove(connection.Player);
+		    	  connection.Player = null;
 		    }
         });
         
@@ -116,12 +120,16 @@ public class EotlNetwork {
 	{
 		Kryo kryo = endpoint.getKryo();
 		kryo.register(EotlLoginPacket.class);
+		kryo.register(HashMap.class);
+		kryo.register(EotlEntityUpdatePacket.class);
 	}
 	
-	public void createEntity(EotlEntity ent)
+	public void broadcastEntity(EotlEntity ent)
 	{
-		EotlNewEntityPacket packet = new EotlNewEntityPacket();
-		packet.entity = ent;
+		if(ent == null) return;
+		
+		EotlEntityUpdatePacket packet = new EotlEntityUpdatePacket();
+		packet.data = ent.generateUpdateData();
 		
 		for(EotlPlayer ply : players)
 		{
