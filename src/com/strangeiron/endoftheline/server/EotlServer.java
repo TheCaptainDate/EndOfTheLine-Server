@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
+import com.esotericsoftware.minlog.Log;
 import com.strangeiron.endoftheline.server.entity.EotlEntityManager;
 
 public class EotlServer {
@@ -26,11 +27,12 @@ public class EotlServer {
 	private static long lastLoopTime = System.nanoTime();
 	private static long lastFpsTime;
 	private static int fps;
-	private final static int TARGET_FPS = 30;
+	private final static int TARGET_FPS = 15;
 	private final static long OPTIMAL_TIME = 1000000000 / TARGET_FPS; 
 	
 	public static final void main(String[] args) {
 		log.info("\"" + Tag + "\" server v" + version + " is loading");
+		Log.set(Log.LEVEL_TRACE);
 		
 		br = new BufferedReader(new InputStreamReader(System.in));
 		settings = EotlSettings.GetInstance();
@@ -60,47 +62,10 @@ public class EotlServer {
 		network = EotlNetwork.GetInstance();
 		network.init();
 		
-		EotlEntityManager entityManager = EotlEntityManager.GetInstance();
+		final EotlEntityManager entityManager = EotlEntityManager.GetInstance();
 		
-		while(ServerRunning)
-		{
-			 // work out how long its been since the last update, this
-		      // will be used to calculate how far the entities should
-		      // move this loop
-		      long now = System.nanoTime();
-		      long updateLength = now - lastLoopTime;
-		      lastLoopTime = now;
-		      double delta = updateLength / ((double)OPTIMAL_TIME);
-
-		      // update the frame counter
-		      lastFpsTime += updateLength;
-		      fps++;
-		      
-		      // update our FPS counter if a second has passed since
-		      // we last recorded
-		      if (lastFpsTime >= 1000000000)
-		      {
-		         System.out.println("(FPS: "+fps+")");
-		         lastFpsTime = 0;
-		         fps = 0;
-		      }
-		      
-		      // update the game logic
-		      entityManager.tick(delta);
-		      
-		      // we want each frame to take 10 milliseconds, to do this
-		      // we've recorded when we started the frame. We add 10 milliseconds
-		      // to this and then factor in the current time to give 
-		      // us our final value to wait for
-		      // remember this is in ms, whereas our lastLoopTime etc. vars are in ns.
-	    	  //try {
-				//Thread.sleep( (lastLoopTime-System.nanoTime() + OPTIMAL_TIME)/1000000 );
-			//} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-			//	e.printStackTrace();
-			//}
-		    	  
-		}
+		 Thread GameLoop = new Thread(new EotlGameLoop());
+		 GameLoop.start();	
 	}
 	
 	private static String GetExecutionPath(){
