@@ -111,7 +111,7 @@ public class EotlNetwork {
 			server.bind(settings.getPort());
 		} catch (IOException e) {
 			e.printStackTrace();
-			EotlServer.readAnyKeyExit("Error: Can't bind port!");
+			EotlUtils.readAnyKeyExit("Error: Can't bind port!");
 		}
         server.start();
 	}

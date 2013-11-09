@@ -15,39 +15,29 @@ public class EotlGameLoop implements Runnable {
 	private EotlEntityManager entityManager = EotlEntityManager.GetInstance();
 	
 	@Override
+        @SuppressWarnings("SleepWhileInLoop")
 	public void run() {
 	
 	    long lastLoop = System.currentTimeMillis();
 	
 	    while (serverRunning){
-	
-	        //Figure out how long its been since last update - used for entity calculation
 	        long current = System.currentTimeMillis();
 	        long updateTime = current - lastLoop;
 	        lastLoop = current;
 	
 	        delta = updateTime / ((double)OPTIMAL_TIME);
-	
+                System.out.println("Delta: " + delta);
 	        lastFps += updateTime;
 	        FPS++;
 	        
-	        System.out.println(FPS);
-	        System.out.println(lastFps);
-	        if(lastFps >= 1000000000){
+	        if(lastFps >= 1000){
 	            System.out.println("(FPS: "+ FPS +")");
 	            lastFps = 0;
 	            FPS = 0;
 	        }
 	
-	        //Updates state + calls render
 	        entityManager.tick(delta);
-	
-	        /*
-	         * We need each frame to take 10mill-sec
-	         * Take recorded time + 10 milli
-	         * then factor current time
-	         * this ^ is final value to wait
-	         */
+                
 	        try{
 	            Thread.sleep( (lastLoop - System.currentTimeMillis() + OPTIMAL_TIME) / 1000000 );
 	        }
