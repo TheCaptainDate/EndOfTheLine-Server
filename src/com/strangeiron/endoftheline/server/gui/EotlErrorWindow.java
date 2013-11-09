@@ -18,7 +18,7 @@ public class EotlErrorWindow extends javax.swing.JFrame {
     public EotlErrorWindow(String error) {
         initComponents();
         setVisible(true);
-        jTextArea1.setText(error);
+        consoleOutput.setText(error);
     }
 
     /**
@@ -31,7 +31,7 @@ public class EotlErrorWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        consoleOutput = new javax.swing.JTextArea();
         jProgressBar1 = new javax.swing.JProgressBar();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -39,9 +39,9 @@ public class EotlErrorWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        consoleOutput.setColumns(20);
+        consoleOutput.setRows(5);
+        jScrollPane1.setViewportView(consoleOutput);
 
         jLabel1.setText("Sending crash report... (You can disable crash-reporting in config, or just by clicking this button -->)");
 
@@ -91,11 +91,11 @@ public class EotlErrorWindow extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea consoleOutput;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

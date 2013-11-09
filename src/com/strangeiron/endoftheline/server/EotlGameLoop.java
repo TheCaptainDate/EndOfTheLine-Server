@@ -12,7 +12,6 @@ public class EotlGameLoop implements Runnable {
 	private final int TARGET = 30;
 	private final long OPTIMAL_TIME = 1000000000 / TARGET;   
 	private boolean serverRunning = true;
-	private EotlEntityManager entityManager = EotlEntityManager.GetInstance();
 	
 	@Override
         @SuppressWarnings("SleepWhileInLoop")
@@ -26,17 +25,15 @@ public class EotlGameLoop implements Runnable {
 	        lastLoop = current;
 	
 	        delta = updateTime / ((double)OPTIMAL_TIME);
-                System.out.println("Delta: " + delta);
 	        lastFps += updateTime;
 	        FPS++;
 	        
 	        if(lastFps >= 1000){
-	            System.out.println("(FPS: "+ FPS +")");
 	            lastFps = 0;
 	            FPS = 0;
 	        }
 	
-	        entityManager.tick(delta);
+	        EotlEntityManager.tick(delta);
                 
 	        try{
 	            Thread.sleep( (lastLoop - System.currentTimeMillis() + OPTIMAL_TIME) / 1000000 );

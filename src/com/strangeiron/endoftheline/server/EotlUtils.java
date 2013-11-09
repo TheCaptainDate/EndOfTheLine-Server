@@ -6,12 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class EotlUtils {
-    private static EotlSettings settings = EotlSettings.GetInstance();
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     
     public static void readAnyKeyExit(String msg)
     {
-        if(settings.isConsoleMode())
+        if(EotlSettings.isConsoleMode())
         {
             log(msg);
             log("Press ENTER to exit");
@@ -29,11 +28,15 @@ public class EotlUtils {
     
     public static void log(String msg)
     {
-         if(settings.isConsoleMode())
+         if(EotlSettings.isConsoleMode())
          {
              System.out.println("EOTL: " + msg);
          } else {
              EotlConsole.GetInstance().AddLine(msg);
          }
+    }
+
+    static void log_error(String error_msg) {
+       log("Error: " + error_msg);
     }
 }

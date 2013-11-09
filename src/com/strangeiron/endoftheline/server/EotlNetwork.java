@@ -23,23 +23,10 @@ import com.strangeiron.endoftheline.server.protocol.EotlPlayer;
 import com.strangeiron.endoftheline.server.protocol.EotlPlayerConnection;
 
 public class EotlNetwork {
+	private static Server server; // okay ;/
+	private static HashSet<EotlPlayer> players = new HashSet<EotlPlayer>();
 	
-	private static EotlNetwork __instance = new EotlNetwork();
-	private Server server; // okay ;/
-	private EotlSettings settings;
-	private final Logger log = Logger.getLogger("");
-	private HashSet<EotlPlayer> players = new HashSet<EotlPlayer>();
-	private EotlEntityManager entityManager = EotlEntityManager.GetInstance();
-	
-	private EotlNetwork() {
-		settings = EotlSettings.GetInstance();
-	}
-	
-	public static EotlNetwork GetInstance() {
-		return __instance;
-	}
-	
-	public void init() 
+	public static void init() 
 	{
 		// Создаем сервер со своей реализацией класса Connection 
 		// (наша реализация будет хранить класс информации игрока, в отличии от дефолной. Вот :P) // А это ок? 
@@ -85,10 +72,10 @@ public class EotlNetwork {
                     	 EotlCharacter character = new EotlCharacter();
                     	 character.x = 50;
                     	 character.y = 50;
-                    	 entityManager.registerEntity(character);
+                    	 EotlEntityManager.registerEntity(character);
                     	 broadcastEntity(character);
                     	
-                    	log.info("Player \"" + packet.Name + "\" has connected");
+                    	EotlUtils.log("Player \"" + packet.Name + "\" has connected");
                     	return;
                     }
             }
@@ -108,7 +95,7 @@ public class EotlNetwork {
         });
         
         try {
-			server.bind(settings.getPort());
+			server.bind(EotlSettings.getPort());
 		} catch (IOException e) {
 			e.printStackTrace();
 			EotlUtils.readAnyKeyExit("Error: Can't bind port!");
@@ -116,7 +103,7 @@ public class EotlNetwork {
         server.start();
 	}
 	
-	private void loadClasses(EndPoint endpoint)
+	private static void loadClasses(EndPoint endpoint)
 	{
 		Kryo kryo = endpoint.getKryo();
 		kryo.register(EotlLoginPacket.class);
@@ -124,7 +111,7 @@ public class EotlNetwork {
 		kryo.register(EotlEntityUpdatePacket.class);
 	}
 	
-	public void broadcastEntity(EotlEntity ent)
+	public static void broadcastEntity(EotlEntity ent)
 	{
 		if(ent == null) return;
 		
@@ -138,7 +125,7 @@ public class EotlNetwork {
 		}
 	}
 	
-	public void broadcastEntityUpdate(EotlEntity ent)
+	public static void broadcastEntityUpdate(EotlEntity ent)
 	{
 		if(ent == null) return;
 		

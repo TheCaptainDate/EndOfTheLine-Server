@@ -12,30 +12,19 @@ import java.util.ArrayList;
 import com.strangeiron.endoftheline.server.EotlNetwork;
 
 public class EotlEntityManager {
+    
+	private static ArrayList<EotlEntity> entites = new ArrayList<EotlEntity>(); 
 	
-	private static  EotlEntityManager __instance = new EotlEntityManager();
-	private EotlNetwork network;
-	private ArrayList<EotlEntity> entites = new ArrayList<EotlEntity>(); 
-	
-	private EotlEntityManager() {
-		 network = EotlNetwork.GetInstance();
-	}
-	
-	public void tick(double delta) 
+	public static void tick(double delta) 
 	{
 		for(EotlEntity ent : entites) 
 		{
 			ent.tick(delta);
-			EotlNetwork.GetInstance().broadcastEntityUpdate(ent);
+			EotlNetwork.broadcastEntityUpdate(ent);
 		}
 	}
 	
-	public static EotlEntityManager GetInstance() 
-	{
-		return __instance;
-	}
-	
-	public void registerEntity(EotlEntity ent) 
+	public static void registerEntity(EotlEntity ent) 
 	{
 		entites.add(ent);
 	}
