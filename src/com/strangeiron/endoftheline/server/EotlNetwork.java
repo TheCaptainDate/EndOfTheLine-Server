@@ -134,6 +134,7 @@ public class EotlNetwork {
                 kryo.register(EotlKeysUpdatePacket.class);
                 kryo.register(boolean[].class);
                 kryo.register(HashMap[].class);
+                kryo.register(EotlGlobalUpdatePacket.class);
 	}
 	
 	public static void broadcastEntity(EotlEntity ent)
