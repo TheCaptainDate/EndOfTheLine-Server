@@ -27,5 +27,6 @@ public class EotlEntityManager {
 	public static void registerEntity(EotlEntity ent) 
 	{
 		entites.add(ent);
+                ent.id = entites.indexOf(ent);
 	}
 }

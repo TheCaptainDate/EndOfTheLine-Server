@@ -6,7 +6,11 @@
  */
 package com.strangeiron.endoftheline.server.protocol;
 
+import com.strangeiron.endoftheline.server.entity.EotlCharacter;
+
 public class EotlPlayer {
 	public EotlPlayerConnection connection;
 	public String Name;
+        public boolean[] buttons;
+        public EotlCharacter character;
 }

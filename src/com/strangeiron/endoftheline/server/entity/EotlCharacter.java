@@ -11,7 +11,6 @@ public class EotlCharacter extends EotlEntity{
 		if(x <= 10) modificator = 3;
 		if(x >= 1000) modificator = -3;
 		x = x + (float) (modificator * delta);
-		System.out.println(x);
 	}
 
 	@Override

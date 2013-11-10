@@ -19,6 +19,7 @@ import com.strangeiron.endoftheline.server.entity.EotlEntity;
 import com.strangeiron.endoftheline.server.entity.EotlEntityManager;
 import com.strangeiron.endoftheline.server.protocol.EotlLoginPacket;
 import com.strangeiron.endoftheline.server.protocol.EotlEntityUpdatePacket;
+import com.strangeiron.endoftheline.server.protocol.EotlKeysUpdatePacket;
 import com.strangeiron.endoftheline.server.protocol.EotlPlayer;
 import com.strangeiron.endoftheline.server.protocol.EotlPlayerConnection;
 
@@ -40,6 +41,7 @@ public class EotlNetwork {
 		
 		// listener
         server.addListener(new Listener() {
+            @Override
             public void received (Connection c, Object object) {
                     EotlPlayerConnection connection = (EotlPlayerConnection)c;
                     
@@ -70,6 +72,7 @@ public class EotlNetwork {
                     	
                     	// Создаем энтити игрока и отсылаем ее всем.
                     	 EotlCharacter character = new EotlCharacter();
+                         ply.character = character;
                     	 character.x = 50;
                     	 character.y = 50;
                     	 EotlEntityManager.registerEntity(character);
@@ -77,6 +80,23 @@ public class EotlNetwork {
                     	
                     	EotlUtils.log("Player \"" + packet.Name + "\" has connected");
                     	return;
+                    }
+                    
+                    if (object instanceof EotlKeysUpdatePacket) 
+                    {                        
+                        EotlKeysUpdatePacket packet = (EotlKeysUpdatePacket) object;
+                        connection.Player.buttons = packet.buttons;
+                        
+                        for(EotlPlayer ply : players)
+                    	{
+                            if(ply.connection != connection) 
+                            {
+                                EotlKeysUpdatePacket pac = new EotlKeysUpdatePacket();
+                                pac.buttons = packet.buttons;
+                                pac.charId = connection.Player.character.id;
+                                server.sendToTCP(connection.getID(), pac);
+                            }
+                        }
                     }
             }
             
@@ -109,6 +129,8 @@ public class EotlNetwork {
 		kryo.register(EotlLoginPacket.class);
 		kryo.register(HashMap.class);
 		kryo.register(EotlEntityUpdatePacket.class);
+                kryo.register(EotlKeysUpdatePacket.class);
+                kryo.register(boolean[].class);
 	}
 	
 	public static void broadcastEntity(EotlEntity ent)
@@ -128,8 +150,6 @@ public class EotlNetwork {
 	public static void broadcastEntityUpdate(EotlEntity ent)
 	{
 		if(ent == null) return;
-		
-		System.out.println("update");
 		EotlEntityUpdatePacket packet = new EotlEntityUpdatePacket();
 		packet.data = ent.generateUpdateData();
 		packet.data.put("action", "update");

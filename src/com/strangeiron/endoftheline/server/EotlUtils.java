@@ -36,7 +36,7 @@ public class EotlUtils {
          }
     }
 
-    static void log_error(String error_msg) {
+    public static void log_error(String error_msg) {
        log("Error: " + error_msg);
     }
 }

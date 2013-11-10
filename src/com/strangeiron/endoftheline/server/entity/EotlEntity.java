@@ -6,6 +6,7 @@ import java.util.HashMap;
 public abstract class EotlEntity {
 	public float x;
 	public float y;
+        public int id;
 
 	public abstract void tick(double delta);
 	public abstract HashMap<String, String> generateUpdateData();
