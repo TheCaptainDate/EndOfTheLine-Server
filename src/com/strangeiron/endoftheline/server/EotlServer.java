@@ -57,6 +57,9 @@ public class EotlServer {
             // загружаем конфигурации
             EotlSettings.LoadSettings();
 
+            // загружаем энтити менеджер
+            EotlEntityManager.init();
+            
             // загружаем сервер
             EotlNetwork.init();
 

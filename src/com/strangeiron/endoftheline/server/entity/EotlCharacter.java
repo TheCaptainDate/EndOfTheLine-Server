@@ -19,7 +19,8 @@ public class EotlCharacter extends EotlEntity{
 		
 		data.put("type", TYPE); 
 		data.put("x", String.valueOf(x)); 
-		data.put("y", String.valueOf(y)); 
+		data.put("y", String.valueOf(y));
+                data.put("id", String.valueOf(id));
 		
 		return data;
 	}

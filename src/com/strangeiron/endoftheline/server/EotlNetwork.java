@@ -77,8 +77,9 @@ public class EotlNetwork {
                          ply.character = character;
                     	 character.x = 50;
                     	 character.y = 50;
+                         
                     	 EotlEntityManager.registerEntity(character);
-                    	 broadcastEntity(character);
+                    	 broadcastNewCharacter(character, ply);
                     	
                     	EotlUtils.log("Player \"" + packet.Name + "\" has connected");
                     	return;
@@ -149,6 +150,27 @@ public class EotlNetwork {
 		{
 			ply.connection.sendTCP(packet);
 		}
+	}
+        
+        public static void broadcastNewCharacter(EotlEntity ent, EotlPlayer player)
+	{
+		if(ent == null) return;
+                if(player == null) return;
+		
+		EotlEntityUpdatePacket packet = new EotlEntityUpdatePacket();
+		packet.data = ent.generateUpdateData();
+		packet.data.put("action", "register");
+		
+		for(EotlPlayer ply : players)
+		{
+                    if(!player.equals(ply))
+                    {
+                        ply.connection.sendTCP(packet);
+                    }
+		}
+                
+                packet.data.put("type", "LocalCharacter");
+                player.connection.sendTCP(packet);
 	}
 	
 	public static void broadcastEntityUpdate(EotlEntity ent)
