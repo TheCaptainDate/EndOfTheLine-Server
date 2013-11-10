@@ -34,5 +34,6 @@ public class EotlEntityManager {
 	{
 		entites.add(ent);
                 ent.id = entites.indexOf(ent);
+                System.out.println(ent.id);
 	}
 }

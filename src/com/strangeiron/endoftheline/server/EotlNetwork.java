@@ -71,6 +71,9 @@ public class EotlNetwork {
                     	ply.Name = packet.Name;
                     	ply.connection = connection;
                     	players.add(ply);
+                        
+                        // записываем его
+                        connection.Player = ply;
                     	
                     	// Создаем энтити игрока и отсылаем ее всем.
                     	 EotlCharacter character = new EotlCharacter();
@@ -79,6 +82,7 @@ public class EotlNetwork {
                     	 character.y = 50;
                          
                     	 EotlEntityManager.registerEntity(character);
+                         System.out.println("Ent id: " + character.id);
                     	 broadcastNewCharacter(character, ply);
                     	
                     	EotlUtils.log("Player \"" + packet.Name + "\" has connected");
@@ -88,7 +92,7 @@ public class EotlNetwork {
                     if (object instanceof EotlKeysUpdatePacket) 
                     {                        
                         EotlKeysUpdatePacket packet = (EotlKeysUpdatePacket) object;
-                        connection.Player.buttons = packet.buttons;
+                        connection.Player.buttons = packet.buttons; 
                         
                         for(EotlPlayer ply : players)
                     	{
