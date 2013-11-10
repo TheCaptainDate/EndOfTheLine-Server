@@ -13,14 +13,13 @@ import com.strangeiron.endoftheline.server.EotlNetwork;
 
 public class EotlEntityManager {
     
-	private static ArrayList<EotlEntity> entites = new ArrayList<EotlEntity>(); 
+	public static ArrayList<EotlEntity> entites = new ArrayList<EotlEntity>(); 
 	
 	public static void tick(double delta) 
 	{
 		for(EotlEntity ent : entites) 
 		{
 			ent.tick(delta);
-			EotlNetwork.broadcastEntityUpdate(ent);
 		}
 	}
 	

@@ -19,6 +19,7 @@ import com.strangeiron.endoftheline.server.entity.EotlEntity;
 import com.strangeiron.endoftheline.server.entity.EotlEntityManager;
 import com.strangeiron.endoftheline.server.protocol.EotlLoginPacket;
 import com.strangeiron.endoftheline.server.protocol.EotlEntityUpdatePacket;
+import com.strangeiron.endoftheline.server.protocol.EotlGlobalUpdatePacket;
 import com.strangeiron.endoftheline.server.protocol.EotlKeysUpdatePacket;
 import com.strangeiron.endoftheline.server.protocol.EotlPlayer;
 import com.strangeiron.endoftheline.server.protocol.EotlPlayerConnection;
@@ -32,6 +33,7 @@ public class EotlNetwork {
 		// Создаем сервер со своей реализацией класса Connection 
 		// (наша реализация будет хранить класс информации игрока, в отличии от дефолной. Вот :P) // А это ок? 
 		server = new Server() {
+                        @Override
 			protected Connection newConnection() {
 				return new EotlPlayerConnection();
 			}
@@ -131,6 +133,7 @@ public class EotlNetwork {
 		kryo.register(EotlEntityUpdatePacket.class);
                 kryo.register(EotlKeysUpdatePacket.class);
                 kryo.register(boolean[].class);
+                kryo.register(HashMap[].class);
 	}
 	
 	public static void broadcastEntity(EotlEntity ent)
@@ -159,5 +162,21 @@ public class EotlNetwork {
 			ply.connection.sendTCP(packet);
 		}
 	}
-
+        
+        public static void globalUpdate()
+        {
+            HashMap<String, String>[] ents = new HashMap[EotlEntityManager.entites.size()];
+            for (int i = 0; i < EotlEntityManager.entites.size(); i++) {
+                EotlEntity eotlEntity = EotlEntityManager.entites.get(i);
+                ents[i] = eotlEntity.generateUpdateData();
+            }
+            
+            EotlGlobalUpdatePacket packet = new EotlGlobalUpdatePacket();
+            packet.ents = ents;
+            
+            for(EotlPlayer ply : players)
+            {
+                server.sendToTCP(ply.connection.getID(), packet);
+            }
+        }
 }
