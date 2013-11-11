@@ -57,7 +57,7 @@ public class EotlEntityManager {
         
         public static boolean checkIsIdFree(int id)
         {
-            if(entites[id] != null && id == 0)
+            if(entites[id] != null || id == 0)
             {
                 return false;
             }
