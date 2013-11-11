@@ -211,9 +211,10 @@ public class EotlNetwork {
         
         public static void globalUpdate()
         {
-            /*HashMap<String, String>[] ents = new HashMap[EotlEntityManager.entites.size()];
-            for (int i = 0; i < EotlEntityManager.entites.size(); i++) {
-                EotlEntity eotlEntity = EotlEntityManager.entites.get(i);
+            HashMap[] ents = new HashMap[EotlEntityManager.entites.length];
+            
+            for (int i = 0; i < EotlEntityManager.entites.length; i++) {
+                EotlEntity eotlEntity = EotlEntityManager.entites[i];
                 ents[i] = eotlEntity.generateUpdateData();
             }
             
@@ -223,6 +224,6 @@ public class EotlNetwork {
             for(EotlPlayer ply : players)
             {
                 server.sendToTCP(ply.connection.getID(), packet);
-            } */ // ---> ннада переписать
+            } 
         }
 }
