@@ -65,6 +65,9 @@ public class EotlServer {
 
              Thread GameLoop = new Thread(new EotlGameLoop());
              GameLoop.start();	
+             
+             Thread NetworkLoop = new Thread(new EotlNetworkLoop());
+             NetworkLoop.start();
     }
 	
 	private static String GetExecutionPath(){

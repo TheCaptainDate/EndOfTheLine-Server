@@ -210,11 +210,13 @@ public class EotlNetwork {
 	}
         
         public static void globalUpdate()
-        {
+        {                    
             HashMap[] ents = new HashMap[EotlEntityManager.entites.length];
             
             for (int i = 0; i < EotlEntityManager.entites.length; i++) {
                 EotlEntity eotlEntity = EotlEntityManager.entites[i];
+                
+                if(eotlEntity == null || i == 0) continue;
                 ents[i] = eotlEntity.generateUpdateData();
             }
             
