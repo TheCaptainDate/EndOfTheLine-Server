@@ -81,8 +81,11 @@ public class EotlNetwork {
                     	 character.x = 50;
                     	 character.y = 50;
                          
-                    	 EotlEntityManager.registerEntity(character);
-                         System.out.println("Ent id: " + character.id);
+                         // Перед регистрацией энтити отсылаем игроку уже существующие энтити
+                         broadcastEntsForPly(ply);
+                         
+                         // И только затем создаем его персонажа
+                    	 EotlEntityManager.registerEntity(character);                         
                     	 broadcastNewCharacter(character, ply);
                     	
                     	EotlUtils.log("Player \"" + packet.Name + "\" has connected");
@@ -176,6 +179,22 @@ public class EotlNetwork {
                 packet.data.put("type", "LocalCharacter");
                 player.connection.sendTCP(packet);
 	}
+        
+        public static void broadcastEntsForPly(EotlPlayer ply)
+        {
+            if(ply == null) return;
+            
+            for (int i = 0; i < EotlEntityManager.entites.length; i++) {
+                EotlEntity ent = EotlEntityManager.entites[i];
+                
+                if(ent == null) continue;                
+                EotlEntityUpdatePacket packet = new EotlEntityUpdatePacket();
+		packet.data = ent.generateUpdateData();
+		packet.data.put("action", "register");
+                
+                ply.connection.sendTCP(packet);   
+            }
+        }
 	
 	public static void broadcastEntityUpdate(EotlEntity ent)
 	{
@@ -192,7 +211,7 @@ public class EotlNetwork {
         
         public static void globalUpdate()
         {
-            HashMap<String, String>[] ents = new HashMap[EotlEntityManager.entites.size()];
+            /*HashMap<String, String>[] ents = new HashMap[EotlEntityManager.entites.size()];
             for (int i = 0; i < EotlEntityManager.entites.size(); i++) {
                 EotlEntity eotlEntity = EotlEntityManager.entites.get(i);
                 ents[i] = eotlEntity.generateUpdateData();
@@ -204,6 +223,6 @@ public class EotlNetwork {
             for(EotlPlayer ply : players)
             {
                 server.sendToTCP(ply.connection.getID(), packet);
-            }
+            } */ // ---> ннада переписать
         }
 }
