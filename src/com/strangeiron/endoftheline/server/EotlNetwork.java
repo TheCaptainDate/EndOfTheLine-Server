@@ -97,14 +97,15 @@ public class EotlNetwork {
                         EotlKeysUpdatePacket packet = (EotlKeysUpdatePacket) object;
                         connection.Player.buttons = packet.buttons; 
                         
+                        EotlKeysUpdatePacket pac = new EotlKeysUpdatePacket();
+                        pac.buttons = packet.buttons;
+                        pac.charId = connection.Player.character.id;
+                        
                         for(EotlPlayer ply : players)
                     	{
                             if(ply.connection != connection) 
                             {
-                                EotlKeysUpdatePacket pac = new EotlKeysUpdatePacket();
-                                pac.buttons = packet.buttons;
-                                pac.charId = connection.Player.character.id;
-                                server.sendToTCP(connection.getID(), pac);
+                                ply.connection.sendTCP(pac);
                             }
                         }
                     }
