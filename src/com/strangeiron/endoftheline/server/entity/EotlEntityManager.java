@@ -29,6 +29,7 @@ public class EotlEntityManager {
                 
                 if(eotlEntity != null)
                 {
+                    eotlEntity._tick(delta);
                     eotlEntity.tick(delta);
                 }
             }
@@ -39,7 +40,6 @@ public class EotlEntityManager {
             int id = getFreeId();
             entites[id] = ent;
             ent.id = id;
-            System.out.println(ent.id);
 	}
         
         public static int getFreeId()

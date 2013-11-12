@@ -108,6 +108,8 @@ public class EotlNetwork {
                                 ply.connection.sendTCP(pac);
                             }
                         }
+                        
+                        connection.Player.character.buttons =  packet.buttons;
                     }
             }
             
@@ -226,6 +228,7 @@ public class EotlNetwork {
             
             for(EotlPlayer ply : players)
             {
+                if(ply == null) continue; // @TODO: добавить isValid и подчищать невалидных!!
                 server.sendToTCP(ply.connection.getID(), packet);
             } 
         }
