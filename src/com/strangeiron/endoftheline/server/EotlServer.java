@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import com.strangeiron.endoftheline.server.entity.EotlEntityManager;
 import com.strangeiron.endoftheline.server.gui.EotlConsole;
+import com.strangeiron.endoftheline.server.scripting.LuaManager;
 import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
 import java.io.Console;
 
@@ -63,11 +64,13 @@ public class EotlServer {
             // загружаем сервер
             EotlNetwork.init();
 
-             Thread GameLoop = new Thread(new EotlGameLoop());
-             GameLoop.start();	
-             
-             Thread NetworkLoop = new Thread(new EotlNetworkLoop());
-             NetworkLoop.start();
+            Thread GameLoop = new Thread(new EotlGameLoop());
+            GameLoop.start();	
+
+            Thread NetworkLoop = new Thread(new EotlNetworkLoop());
+            NetworkLoop.start();
+            
+            LuaManager.init();
     }
 	
 	private static String GetExecutionPath(){
