@@ -5,6 +5,8 @@
 
 package com.strangeiron.endoftheline.server;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -22,6 +24,8 @@ public class EotlServer {
 	public static String ShortTag = "EOTL";
 	
 	public static final void main(String[] args) {
+            GdxNativesLoader.load(); 
+            
             Console console = System.console();
             if (console == null) 
             {
@@ -58,6 +62,9 @@ public class EotlServer {
             // загружаем конфигурации
             EotlSettings.LoadSettings();
 
+            // загружаем управление миром (картой)
+            EotlWorld.init();
+            
             // загружаем энтити менеджер
             EotlEntityManager.init();
             

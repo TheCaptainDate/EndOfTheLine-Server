@@ -1,5 +1,8 @@
 package com.strangeiron.endoftheline.server.entity;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.strangeiron.endoftheline.server.EotlInputManager;
 import com.strangeiron.endoftheline.server.math.EotlVector2D;
 import java.util.HashMap;
@@ -8,24 +11,34 @@ public class EotlCharacter extends EotlEntity{
 	private final String TYPE = "Character";
         public boolean[] buttons = new boolean[64];
         
-        @Override
-        public void init() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-	
 	@Override
-	public void tick(double delta) {
+        public void init()
+        {
+            setPhysicsType(BodyDef.BodyType.DynamicBody);
+            setModel("test.mdl");
+            model.setRestitution(1f);
+            model.scale(300f);
+            setPosition(40, 40);
+            spawn();
+        }
+        
+	@Override
+	public void tick(float delta) {          
+            System.out.println(buttons[EotlInputManager.RIGHT]);
+            
             if(buttons[EotlInputManager.RIGHT]) 
-                this.applyForce(new EotlVector2D(10, 0)); // @TODO: delta as FLOAT!!!
+                physObject.applyForce(new Vector2(1000, 0).scl(1f / 60f), physObject.getPosition(), true);
             
             if(buttons[EotlInputManager.LEFT]) 
-                this.applyForce(new EotlVector2D(-10, 0));
+                physObject.applyForce(new Vector2(-1000, 0).scl(1f / 60f), physObject.getPosition(), true);
             
             if(buttons[EotlInputManager.UP]) 
-                this.applyForce(new EotlVector2D(0, 10));
+                physObject.applyForce(new Vector2(0, 1000).scl(1f / 60f), physObject.getPosition(), true);
             
             if(buttons[EotlInputManager.DOWN]) 
-                this.applyForce(new EotlVector2D(0, -10));
+                physObject.applyForce(new Vector2(0, -1000).scl(1f / 60f), physObject.getPosition(), true);
+            
+            System.out.println(physObject.getPosition().toString());
 	}
 
 	@Override

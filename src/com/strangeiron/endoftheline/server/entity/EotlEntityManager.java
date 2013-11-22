@@ -29,8 +29,13 @@ public class EotlEntityManager {
                 
                 if(eotlEntity != null)
                 {
-                    eotlEntity._tick(delta);
-                    eotlEntity.tick(delta);
+                    if(eotlEntity.initiated == false) 
+                    {
+                        eotlEntity._init();
+                    } 
+                    
+                    eotlEntity._tick((float) delta); // @TODO: FIXME
+                    eotlEntity.tick((float) delta);
                 }
             }
 	}

@@ -32,7 +32,8 @@ public class EotlGameLoop implements Runnable {
 	            lastFps = 0;
 	            FPS = 0;
 	        }
-	
+                
+                EotlWorld.tick(delta);
 	        EotlEntityManager.tick(delta);
                 
 	        try{

@@ -7,7 +7,6 @@ package com.strangeiron.endoftheline.server;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.logging.Logger;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -26,7 +25,7 @@ import com.strangeiron.endoftheline.server.protocol.EotlPlayerConnection;
 
 public class EotlNetwork {
 	private static Server server; // okay ;/
-	private static HashSet<EotlPlayer> players = new HashSet<EotlPlayer>();
+	private static final HashSet<EotlPlayer> players = new HashSet<EotlPlayer>();
 	
 	public static void init() 
 	{
