@@ -26,8 +26,7 @@ public class EotlWorld {
     
     public static void tick(double delta) 
     {
-        System.out.println("delta: " + delta); // @TODO FIX DELTA!
-        b2dworld.step(1f / 60f, 4, 4);
+        b2dworld.step(1f / 62f, 4, 4);
     }
     
     /* Physics goes here: 

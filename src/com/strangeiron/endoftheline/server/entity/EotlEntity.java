@@ -16,7 +16,7 @@ public abstract class EotlEntity {
     public float y;
     
     private BodyDef bodyDef;
-    private boolean spawned;
+    public boolean spawned;
     public Body physObject;
     public Eotl2DModel model;
 
@@ -45,6 +45,11 @@ public abstract class EotlEntity {
         physObject = EotlWorld.b2dworld.createBody(bodyDef);
         model.applyToBody(physObject);
         spawned = true;
+    }
+    
+    public void applyImpulse(Vector2 impulse)
+    {
+        physObject.applyLinearImpulse(impulse.scl(1f / 62f), physObject.getPosition(), true);
     }
     
     public void setModel(String modelPath)
