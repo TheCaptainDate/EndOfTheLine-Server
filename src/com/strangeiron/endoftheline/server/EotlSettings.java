@@ -1,5 +1,6 @@
 package com.strangeiron.endoftheline.server;
 
+import com.badlogic.gdx.Gdx;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -50,6 +51,11 @@ public class EotlSettings {
 
     public static String getPathToJar() {
         return pathToJar;
+    }
+    
+    public static String getPathToContent()
+    {
+        return pathToJar + "/content/";
     }
 
 

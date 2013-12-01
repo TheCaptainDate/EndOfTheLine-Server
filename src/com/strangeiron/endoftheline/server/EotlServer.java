@@ -78,6 +78,8 @@ public class EotlServer {
             NetworkLoop.start();
             
             EotlLuaManager.init();
+            
+            EotlWorld.loadMap("test");
     }
 	
 	private static String GetExecutionPath(){
