@@ -32,17 +32,28 @@ public class EotlCharacter extends EotlEntity{
 	@Override
 	public void tick(float delta) {            
             Vector2 vel = physObject.getLinearVelocity();
+            if(isPlayerGrounded()) {
+                state = PlayerState.IDLE;
+            }
+        
             
             if (Math.abs(vel.x) > MAX_VELOCITY) {
                 vel.x = Math.signum(vel.x) * MAX_VELOCITY;
                 physObject.setLinearVelocity(vel.x, vel.y);
             }
-
+            
+            if(buttons[EotlInputManager.JUMP] && state != PlayerState.JUMP)
+            {
+                physObject.setLinearVelocity(vel.x, 0);
+                physObject.setTransform(x, y + 0.01f, 0);
+                physObject.applyLinearImpulse(0, -100, x, y, true);
+                state = PlayerState.JUMP;
+            }
             
             if(buttons[EotlInputManager.RIGHT] && vel.x < MAX_VELOCITY) 
                 applyImpulse(new Vector2(100, 0));
             
-            if(buttons[EotlInputManager.LEFT] && vel.x < -MAX_VELOCITY) 
+            if(buttons[EotlInputManager.LEFT] && vel.x > -MAX_VELOCITY) 
                 applyImpulse(new Vector2(-100, 0));
 	}
 
@@ -92,7 +103,7 @@ public class EotlCharacter extends EotlEntity{
 	}
         
         // static things
-        private static float MAX_VELOCITY = 10f;
+        private static final float MAX_VELOCITY = 50f;
         
         private static enum PlayerState {
             WALK_RIGHT,
