@@ -4,6 +4,7 @@ package com.strangeiron.endoftheline.server.components;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.strangeiron.endoftheline.server.physics.CircleModel;
@@ -20,7 +21,8 @@ public class Eotl2DModel implements Cloneable {
     public final List<CircleModel> circles = new ArrayList<CircleModel>();
     private final List<Vector2> vectorPool = new ArrayList<Vector2>();
     private final CircleShape circleShape = new CircleShape();
-    private final List<FixtureDef> fixtures = new ArrayList<FixtureDef>();
+    private final List<FixtureDef> fixtureDefs = new ArrayList<FixtureDef>();
+    public final List<Fixture> fixtures = new ArrayList<Fixture>();
     
     public Eotl2DModel()
     {
@@ -34,8 +36,10 @@ public class Eotl2DModel implements Cloneable {
 
     public void applyToBody(Body body)
     {
-        for (int i = 0; i < fixtures.size(); i++) {
-            body.createFixture(fixtures.get(i));
+        fixtures.clear();
+        
+        for (int i = 0; i < fixtureDefs.size(); i++) {
+            fixtures.add(body.createFixture(fixtureDefs.get(i)));
         }
     }
     
@@ -57,7 +61,7 @@ public class Eotl2DModel implements Cloneable {
             
             FixtureDef fd = new FixtureDef();
             fd.shape = polygonShape;
-            fixtures.add(fd);
+            fixtureDefs.add(fd);
             
             for (int j = 0; j < vertices.length; j++) {
                 free(vertices[j]);
@@ -75,7 +79,7 @@ public class Eotl2DModel implements Cloneable {
             
             FixtureDef fd = new FixtureDef();
             fd.shape = circleShape;
-            fixtures.add(fd);
+            fixtureDefs.add(fd);
             
             free(center);
         }
@@ -90,22 +94,22 @@ public class Eotl2DModel implements Cloneable {
     
     public void setRestitution(float restitution)
     {
-        for (int i = 0; i < fixtures.size(); i++) {
-            fixtures.get(i).restitution = restitution;
+        for (int i = 0; i < fixtureDefs.size(); i++) {
+            fixtureDefs.get(i).restitution = restitution;
         }
     }
     
     public void setFriction(float friction)
     {
-        for (int i = 0; i < fixtures.size(); i++) {
-            fixtures.get(i).friction = friction;
+        for (int i = 0; i < fixtureDefs.size(); i++) {
+            fixtureDefs.get(i).friction = friction;
         }
     }
     
     public void setDensity(float density)
     {
-        for (int i = 0; i < fixtures.size(); i++) {
-            fixtures.get(i).density = density;
+        for (int i = 0; i < fixtureDefs.size(); i++) {
+            fixtureDefs.get(i).density = density;
         }
     }
     

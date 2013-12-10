@@ -8,8 +8,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.strangeiron.endoftheline.server.components.EotlMap;
 
 public class EotlWorld {
@@ -25,6 +27,12 @@ public class EotlWorld {
     }
 
     public static void tick(double delta) {
+        Array<Contact> contacts = b2dworld.getContactList();
+        for (int i = 0; i < b2dworld.getContactCount(); i++) {
+                Contact contact = contacts.get(i);
+                contact.resetFriction();
+        }
+        
         b2dworld.step(1f / 62f, 4, 4);
     }
 
