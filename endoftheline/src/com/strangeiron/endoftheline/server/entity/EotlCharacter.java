@@ -1,5 +1,6 @@
 package com.strangeiron.endoftheline.server.entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,6 +17,8 @@ public class EotlCharacter extends EotlEntity{
         public boolean[] buttons = new boolean[64];
         
         private PlayerState state = PlayerState.IDLE;
+        private float stillTime = 0f;
+        private boolean grounded;
         
 	@Override
         public void init()
@@ -32,17 +35,34 @@ public class EotlCharacter extends EotlEntity{
 	@Override
 	public void tick(float delta) {            
             Vector2 vel = physObject.getLinearVelocity();
-            if(isPlayerGrounded()) {
-                state = PlayerState.IDLE;
+            grounded = isPlayerGrounded();
+            
+            // постепенное угасание скорости
+            if (!buttons[EotlInputManager.RIGHT]  && !buttons[EotlInputManager.LEFT]) {
+                stillTime += delta;
+                physObject.setLinearVelocity(vel.x * 0.9f, vel.y);
+            } else {
+                stillTime = 0;
             }
-        
+            
+            System.out.println("grounded: " + grounded + " still: " + stillTime);
+            
+            if (!grounded) {
+                setFriction(0f);
+            } else {
+                if (!buttons[EotlInputManager.RIGHT]  && !buttons[EotlInputManager.LEFT] && stillTime > 0.2) {
+                        setFriction(1000f);
+                } else {
+                        setFriction(0.2f);
+                }
+            }
             
             if (Math.abs(vel.x) > MAX_VELOCITY) {
                 vel.x = Math.signum(vel.x) * MAX_VELOCITY;
                 physObject.setLinearVelocity(vel.x, vel.y);
             }
             
-            if(buttons[EotlInputManager.JUMP] && state != PlayerState.JUMP)
+            if(buttons[EotlInputManager.JUMP] && grounded)
             {
                 physObject.setLinearVelocity(vel.x, 0);
                 physObject.setTransform(x, y + 0.01f, 0);
@@ -51,10 +71,10 @@ public class EotlCharacter extends EotlEntity{
             }
             
             if(buttons[EotlInputManager.RIGHT] && vel.x < MAX_VELOCITY) 
-                applyImpulse(new Vector2(100, 0));
+                applyImpulse(new Vector2(500, 0));
             
             if(buttons[EotlInputManager.LEFT] && vel.x > -MAX_VELOCITY) 
-                applyImpulse(new Vector2(-100, 0));
+                applyImpulse(new Vector2(-500, 0));
 	}
 
 	@Override
@@ -103,7 +123,7 @@ public class EotlCharacter extends EotlEntity{
 	}
         
         // static things
-        private static final float MAX_VELOCITY = 50f;
+        private static final float MAX_VELOCITY = 500f;
         
         private static enum PlayerState {
             WALK_RIGHT,

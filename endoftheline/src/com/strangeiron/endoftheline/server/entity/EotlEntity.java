@@ -67,11 +67,32 @@ public abstract class EotlEntity {
         if(!spawned) bodyDef.position.set(vec); else physObject.setTransform(vec, physObject.getAngle());
     }
     
-        public  void setPosition(float x, float y)
+    public  void setPosition(float x, float y)
     {
         if(!spawned) bodyDef.position.set(x, y); else physObject.setTransform(x, y, physObject.getAngle());
     }
-
+    
+    public void setRestitution(float restitution)
+    {
+        for (int i = 0; i < model.fixtures.size(); i++) {
+            model.fixtures.get(i).setRestitution(restitution);
+        }
+    }
+    
+    public void setFriction(float friction)
+    {
+        for (int i = 0; i < model.fixtures.size(); i++) {
+            model.fixtures.get(i).setFriction(friction);
+        }
+    }
+    
+    public void setDensity(float density)
+    {
+        for (int i = 0; i < model.fixtures.size(); i++) {
+            model.fixtures.get(i).setDensity(density);
+        }
+    }
+    
     public abstract void tick(float delta);
     public abstract void init();
     public abstract HashMap<String, String> generateUpdateData();
