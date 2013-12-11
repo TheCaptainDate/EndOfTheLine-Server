@@ -20,7 +20,7 @@ public class EotlWorld {
     private static EotlMap map;
 
     public static void init() {
-        b2dworld = new World(new Vector2(0, 60), true);
+        b2dworld = new World(new Vector2(0, 300f), true);
 
         // debug, @TODO: REMOVE!
         Body ground = createEdge(BodyType.StaticBody, 0, 790, 1280, 790, 1);

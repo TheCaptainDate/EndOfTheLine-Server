@@ -9,8 +9,8 @@ public class EotlInputManager  {
 	public static final int RIGHT = 3;
 
 	public static final int JUMP = 4;
-	public static final int SHOOT = 5;
+	public static final int PRIMARY_SHOT = 5;
+        public static final int SECONDARY_SHOT = 6;
 
 	public static final int ESCAPE = 6;
-
 }

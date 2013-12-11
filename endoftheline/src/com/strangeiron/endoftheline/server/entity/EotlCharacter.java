@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.strangeiron.endoftheline.server.EotlInputManager;
 import com.strangeiron.endoftheline.server.EotlWorld;
 import com.strangeiron.endoftheline.server.math.EotlVector2D;
@@ -19,6 +20,7 @@ public class EotlCharacter extends EotlEntity{
         private PlayerState state = PlayerState.IDLE;
         private float stillTime = 0f;
         private boolean grounded;
+    private long lastGroundTime;
         
 	@Override
         public void init()
@@ -34,6 +36,14 @@ public class EotlCharacter extends EotlEntity{
 	public void tick(float delta) {            
             Vector2 vel = physObject.getLinearVelocity();
             grounded = isPlayerGrounded();
+            
+            if (grounded) {
+                lastGroundTime = TimeUtils.nanoTime();
+            } else {
+                if (TimeUtils.nanoTime() - lastGroundTime < 100000000) {
+                        grounded = true;
+                }
+            }
             
             // постепенное угасание скорости
             if (!buttons[EotlInputManager.RIGHT]  && !buttons[EotlInputManager.LEFT]) {
@@ -67,10 +77,10 @@ public class EotlCharacter extends EotlEntity{
             }
             
             if(buttons[EotlInputManager.RIGHT] && vel.x < MAX_VELOCITY) 
-                applyImpulse(new Vector2(500, 0));
+                applyImpulse(new Vector2(1000f, 0));
             
             if(buttons[EotlInputManager.LEFT] && vel.x > -MAX_VELOCITY) 
-                applyImpulse(new Vector2(-500, 0));
+                applyImpulse(new Vector2(-1000f, 0));
 	}
 
 	@Override
@@ -119,7 +129,7 @@ public class EotlCharacter extends EotlEntity{
 	}
         
         // static things
-        private static final float MAX_VELOCITY = 500f;
+        private static final float MAX_VELOCITY = 1000f;
         
         private static enum PlayerState {
             WALK_RIGHT,

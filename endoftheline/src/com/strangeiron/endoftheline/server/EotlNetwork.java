@@ -94,20 +94,19 @@ public class EotlNetwork {
                     if (object instanceof EotlKeysUpdatePacket) 
                     {                        
                         EotlKeysUpdatePacket packet = (EotlKeysUpdatePacket) object;
-                        connection.Player.buttons = packet.buttons; 
+                        packet.charId = connection.Player.character.id;
                         
-                        EotlKeysUpdatePacket pac = new EotlKeysUpdatePacket();
-                        pac.buttons = packet.buttons;
-                        pac.charId = connection.Player.character.id;
+                        System.out.println("PS: " + packet.buttons[EotlInputManager.PRIMARY_SHOT] + " x: " + packet.x + " y: " + packet.y);
                         
                         for(EotlPlayer ply : players)
                     	{
                             if(ply.connection != connection) 
                             {
-                                ply.connection.sendTCP(pac);
+                                ply.connection.sendTCP(packet);
                             }
                         }
                         
+                        connection.Player.buttons = packet.buttons;
                         connection.Player.character.buttons =  packet.buttons;
                     }
             }
