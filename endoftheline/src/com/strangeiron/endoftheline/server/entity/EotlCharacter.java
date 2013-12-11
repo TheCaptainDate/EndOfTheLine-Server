@@ -25,8 +25,6 @@ public class EotlCharacter extends EotlEntity{
         {
             setPhysicsType(BodyDef.BodyType.DynamicBody);
             setModel("test.mdl");
-            model.setRestitution(1f);
-            model.setFriction(0.5f);
             model.scale(300f);
             setPosition(40, 40);
             spawn();
@@ -44,8 +42,6 @@ public class EotlCharacter extends EotlEntity{
             } else {
                 stillTime = 0;
             }
-            
-            System.out.println("grounded: " + grounded + " still: " + stillTime);
             
             if (!grounded) {
                 setFriction(0f);
